@@ -103,6 +103,7 @@ func main() {
 		log.Fatal(err)
 		return
 	}
+	defer db.Close()
 	store := NewParcelStore(db)
 	service := NewParcelService(store)
 
