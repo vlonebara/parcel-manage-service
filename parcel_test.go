@@ -14,6 +14,7 @@ var testNumberCounter = 10000
 
 func getTestParcel() Parcel {
 	testNumberCounter++
+
 	return Parcel{
 		Number:    testNumberCounter,
 		Client:    1000,
@@ -45,11 +46,12 @@ func TestAddGetDelete(t *testing.T) {
 	id, err := store.Add(parcel)
 	require.NoError(t, err)
 	require.NotZero(t, id)
+
 	parcel.Number = id
 
 	stored, err := store.Get(id)
 	require.NoError(t, err)
-	require.Equal(t, parcel, stored)
+	assert.Equal(t, parcel, stored)
 
 	err = store.Delete(id)
 	require.NoError(t, err)
@@ -82,12 +84,13 @@ func TestSetAddress(t *testing.T) {
 	require.NotZero(t, id)
 
 	newAddress := "new test address"
+
 	err = store.SetAddress(id, newAddress)
 	require.NoError(t, err)
 
 	stored, err := store.Get(id)
 	require.NoError(t, err)
-	require.Equal(t, newAddress, stored.Address)
+	assert.Equal(t, newAddress, stored.Address)
 }
 
 func TestSetStatus(t *testing.T) {
@@ -114,12 +117,13 @@ func TestSetStatus(t *testing.T) {
 	require.NotZero(t, id)
 
 	newStatus := "delivered"
+
 	err = store.SetStatus(id, newStatus)
 	require.NoError(t, err)
 
 	stored, err := store.Get(id)
 	require.NoError(t, err)
-	require.Equal(t, newStatus, stored.Status)
+	assert.Equal(t, newStatus, stored.Status)
 }
 
 func TestGetByClient(t *testing.T) {
@@ -149,12 +153,9 @@ func TestGetByClient(t *testing.T) {
 	parcelMap := map[int]Parcel{}
 	client := 1000
 
-	client := 1000
-	parcels[0].Client = client
-	parcels[1].Client = client
-	parcels[2].Client = client
+	for i := range parcels {
+		parcels[i].Client = client
 
-	for i := 0; i < len(parcels); i++ {
 		id, err := store.Add(parcels[i])
 		require.NoError(t, err)
 		require.NotZero(t, id)
@@ -165,11 +166,12 @@ func TestGetByClient(t *testing.T) {
 
 	storedParcels, err := store.GetByClient(client)
 	require.NoError(t, err)
-	require.Len(t, storedParcels, len(parcels))
+	assert.Len(t, storedParcels, len(parcels))
 
 	for _, parcel := range storedParcels {
 		orig, exists := parcelMap[parcel.Number]
-		require.True(t, exists)
-		require.Equal(t, orig, parcel)
+
+		assert.True(t, exists)
+		assert.Equal(t, orig, parcel)
 	}
 }
