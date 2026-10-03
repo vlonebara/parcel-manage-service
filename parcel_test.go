@@ -10,13 +10,8 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-var testNumberCounter = 10000
-
 func getTestParcel() Parcel {
-	testNumberCounter++
-
 	return Parcel{
-		Number:    testNumberCounter,
 		Client:    1000,
 		Status:    ParcelStatusRegistered,
 		Address:   "test",
